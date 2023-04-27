@@ -1,0 +1,9 @@
+{
+  "name": "my-lambda-function",
+  "version": "1.0.0",
+  "description": "Example Lambda function that uses the Lodash package",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.17.21"
+  }
+}
