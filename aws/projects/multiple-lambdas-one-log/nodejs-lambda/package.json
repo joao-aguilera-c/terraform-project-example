@@ -1,0 +1,11 @@
+{
+  "name": "my-lambda-function",
+  "version": "1.0.0",
+  "description": "Example Lambda function that uses the Lodash package, aws-sdk and winston for log",
+  "main": "index.js",
+  "dependencies": {
+    "lodash": "^4.17.21",
+    "aws-sdk": "latest",
+    "winston": "^3.8.2"
+  }
+}

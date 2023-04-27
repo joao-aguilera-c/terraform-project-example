@@ -7,5 +7,5 @@ variable "region" {
 variable "project_name" {
   description = "Project name"
   type        = string
-  default     = "eks-lb-vpc"
+  default     = "multiple-lambdas-one-log-project"
 }
