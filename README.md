@@ -15,3 +15,10 @@ Modules are designed to be reusable and customizable. They are essentially packa
 Projects are essentially collections of modules that are used to create a complete infrastructure. They can be thought of as blueprints for a production-like infrastructure. Projects are designed to be easily replicable, so that the same infrastructure can be created across different environments, such as development, staging, and production.
 
 Overall, this repository serves as a valuable resource for those looking to learn more about how to use Terraform to create AWS infrastructure projects. It demonstrates the power and flexibility of Terraform, and provides a solid foundation for those looking to create their own Terraform-based infrastructure.
+
+**Project list**
+
+- eks-lb-vpc:
+Implementing a private EKS cluster with a custom VPC and the aws-load-balancer-controller installed
+- multiple-lambdas-one-log:
+Implementing two Lambda functions using a general log stream.
