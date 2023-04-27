@@ -44,6 +44,12 @@ variable "npm_requirements" {
   default     = true
 }
 
+variable "environment_variables" {
+  description = "A map that defines environment variables for the Lambda Function."
+  type        = map(string)
+  default     = {}
+}
+
 variable "tags" {
   description = "The tags of the lambda function"
   type        = map(string)

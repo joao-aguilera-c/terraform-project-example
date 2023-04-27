@@ -15,5 +15,7 @@ module "lambda_function" {
     npm_package_json = true
   }
 
+  environment_variables = var.environment_variables
+
   tags = var.tags
 }
