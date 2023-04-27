@@ -1,6 +1,3 @@
-# Copyright (c) HashiCorp, Inc.
-# SPDX-License-Identifier: MPL-2.0
-
 provider "aws" {
   region = var.region
 }
@@ -22,6 +19,18 @@ module "general_log-stream" {
   log_group_name = module.general_log-group.cloudwatch_log_group_name
 }
 
+locals {
+  policy_statement = {
+    general-log = {
+      effect    = "Allow"
+      actions   = ["logs:PutLogEvents"]
+      resources = [module.general_log-stream.cloudwatch_log_stream_arn]
+    }
+  }
+}
+
+
+
 module "lambdaJs" {
   source        = "../../modules/lambda"
   function_name = "lambda1"
@@ -30,10 +39,14 @@ module "lambdaJs" {
   runtime       = "nodejs14.x"
   lambda_path   = "nodejs-lambda"
   timeout       = 60
+
   environment_variables = {
     LOG_GROUP_NAME  = module.general_log-group.cloudwatch_log_group_name
     LOG_STREAM_NAME = module.general_log-stream.cloudwatch_log_stream_name
   }
+
+  attach_policy_statements = true
+  policy_statements = local.policy_statement
 }
 
 module "lambdaPy" {
@@ -49,4 +62,7 @@ module "lambdaPy" {
     LOG_GROUP_NAME  = module.general_log-group.cloudwatch_log_group_name
     LOG_STREAM_NAME = module.general_log-stream.cloudwatch_log_stream_name
   }
+
+  attach_policy_statements = true
+  policy_statements = local.policy_statement
 }

@@ -1,7 +1,6 @@
 import requests
 
 import boto3
-import logging
 import time
 import os
 
@@ -27,11 +26,11 @@ def put_log_event(log_message):
     )
 
     # Print the log response
-    logging.info(response)
+    print(response)
 
 
 def lambda_handler(event, context):
     put_log_event('Hello, world!')
 
     response = requests.get("https://www.google.com")
-    put_log_event(response.status_code)
+    put_log_event(f"google.com status code: {response.status_code}")

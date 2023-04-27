@@ -17,5 +17,8 @@ module "lambda_function" {
 
   environment_variables = var.environment_variables
 
+  attach_policy_statements = var.attach_policy_statements
+  policy_statements = var.policy_statements
+
   tags = var.tags
 }
