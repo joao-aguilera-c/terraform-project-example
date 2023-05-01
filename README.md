@@ -24,3 +24,5 @@ Implementing a private EKS cluster with a custom VPC and the aws-load-balancer-c
 Implementing two Lambda functions using a general log stream.
 - sqs-triggering-lambda:
 Implementing a Lambda function that is triggered by an SQS queue.
+- lambda-publishing-sns
+Implementing a Lambda function that publishes a message to an SNS topic.
