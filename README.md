@@ -22,3 +22,5 @@ Overall, this repository serves as a valuable resource for those looking to lear
 Implementing a private EKS cluster with a custom VPC and the aws-load-balancer-controller installed
 - multiple-lambdas-one-log:
 Implementing two Lambda functions using a general log stream.
+- sqs-triggering-lambda:
+Implementing a Lambda function that is triggered by an SQS queue.
