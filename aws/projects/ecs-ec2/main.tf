@@ -7,62 +7,63 @@ module "asg" {
   # Autoscaling group
   name = "ecs-asg-one"
 
-  min_size                  = 0
+  min_size                  = 1
   max_size                  = 1
   desired_capacity          = 1
   wait_for_capacity_timeout = 0
-  health_check_type         = "EC2"
+  # health_check_type         = "EC2"
   vpc_zone_identifier       = ["subnet-6b508b27", "subnet-4d433037", "subnet-2c717444"]
 
-  initial_lifecycle_hooks = [
-    {
-      name                  = "ExampleStartupLifeCycleHook"
-      default_result        = "CONTINUE"
-      heartbeat_timeout     = 60
-      lifecycle_transition  = "autoscaling:EC2_INSTANCE_LAUNCHING"
-      notification_metadata = jsonencode({ "hello" = "world" })
-    },
-    {
-      name                  = "ExampleTerminationLifeCycleHook"
-      default_result        = "CONTINUE"
-      heartbeat_timeout     = 180
-      lifecycle_transition  = "autoscaling:EC2_INSTANCE_TERMINATING"
-      notification_metadata = jsonencode({ "goodbye" = "world" })
-    }
-  ]
+  # initial_lifecycle_hooks = [
+  #   {
+  #     name                  = "ExampleStartupLifeCycleHook"
+  #     default_result        = "CONTINUE"
+  #     heartbeat_timeout     = 60
+  #     lifecycle_transition  = "autoscaling:EC2_INSTANCE_LAUNCHING"
+  #     notification_metadata = jsonencode({ "hello" = "world" })
+  #   },
+  #   {
+  #     name                  = "ExampleTerminationLifeCycleHook"
+  #     default_result        = "CONTINUE"
+  #     heartbeat_timeout     = 180
+  #     lifecycle_transition  = "autoscaling:EC2_INSTANCE_TERMINATING"
+  #     notification_metadata = jsonencode({ "goodbye" = "world" })
+  #   }
+  # ]
 
-  instance_refresh = {
-    strategy = "Rolling"
-    preferences = {
-      checkpoint_delay       = 600
-      checkpoint_percentages = [35, 70, 100]
-      instance_warmup        = 300
-      min_healthy_percentage = 50
-    }
-    triggers = ["tag"]
-  }
+  # instance_refresh = {
+  #   strategy = "Rolling"
+  #   preferences = {
+  #     checkpoint_delay       = 600
+  #     checkpoint_percentages = [35, 70, 100]
+  #     instance_warmup        = 300
+  #     min_healthy_percentage = 50
+  #   }
+  #   triggers = ["tag"]
+  # }
 
   # Launch template
   launch_template_name        = "example-asg"
-  launch_template_description = "Launch template example"
-  update_default_version      = true
+  # launch_template_description = "Launch template example"
+  # update_default_version      = true
 
-  image_id          = "ami-08333bccc35d71140"
+  image_id          = "ami-0ecb3533d79bc3fdb"
   instance_type     = "t2.micro"
-  ebs_optimized     = true
-  enable_monitoring = true
+  key_name = "dff-test"
+  # ebs_optimized     = true
+  # enable_monitoring = false
 
   # IAM role & instance profile
-  create_iam_instance_profile = false
-  # iam_role_name               = "example-asg"
-  # iam_role_path               = "/ec2/"
-  # iam_role_description        = "IAM role example"
-  # iam_role_tags = {
-  #   CustomIamRole = "Yes"
-  # }
-  # iam_role_policies = {
-  #   AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
-  # }
+  create_iam_instance_profile = true
+  iam_role_name               = "ecs-asg"
+  iam_role_path               = "/ec2/"
+  iam_role_description        = "IAM role for ecs"
+  iam_role_tags = {
+    CustomIamRole = "Yes"
+  }
+  iam_role_policies = {
+    AmazonSSMManagedInstanceCore = "arn:aws:iam::aws:policy/service-role/AmazonEC2ContainerServiceforEC2Role"
+  }
 
   block_device_mappings = [
     {
@@ -72,24 +73,24 @@ module "asg" {
       ebs = {
         delete_on_termination = true
         encrypted             = true
-        volume_size           = 20
+        volume_size           = 8
         volume_type           = "gp2"
       }
     }
   ]
 
-  capacity_reservation_specification = {
-    capacity_reservation_preference = "open"
-  }
+  # capacity_reservation_specification = {
+  #   capacity_reservation_preference = "open"
+  # }
 
   # cpu_options = {
   #   core_count       = 1
   #   threads_per_core = 1
   # }
 
-  credit_specification = {
-    cpu_credits = "standard"
-  }
+  # credit_specification = {
+  #   cpu_credits = "standard"
+  # }
 
   # instance_market_options = {
   #   market_type = "spot"
@@ -123,20 +124,20 @@ module "asg" {
   #   availability_zone = "us-west-1b"
   # }
 
-  tag_specifications = [
-    {
-      resource_type = "instance"
-      tags          = { WhatAmI = "Instance" }
-    },
-    {
-      resource_type = "volume"
-      tags          = { WhatAmI = "Volume" }
-    },
-    {
-      resource_type = "spot-instances-request"
-      tags          = { WhatAmI = "SpotInstanceRequest" }
-    }
-  ]
+  # tag_specifications = [
+  #   {
+  #     resource_type = "instance"
+  #     tags          = { WhatAmI = "Instance" }
+  #   },
+  #   {
+  #     resource_type = "volume"
+  #     tags          = { WhatAmI = "Volume" }
+  #   },
+  #   {
+  #     resource_type = "spot-instances-request"
+  #     tags          = { WhatAmI = "SpotInstanceRequest" }
+  #   }
+  # ]
 
   tags = {
     Environment = "dev"
@@ -151,6 +152,9 @@ module "ecs_cluster" {
   source = "terraform-aws-modules/ecs/aws//modules/cluster"
 
   cluster_name = "ecs-ec2"
+  cluster_service_connect_defaults = {
+    namespace = "arn:aws:servicediscovery:us-east-2:152780035344:namespace/ns-qbl33kh2olbxkanv"
+  }
 
   cluster_configuration = {
     execute_command_configuration = {
@@ -247,7 +251,7 @@ module "ecs_service" {
 
   name        = "hello-world"
   cluster_arn = module.ecs_cluster.arn
-
+  launch_type = "EC2"
   cpu    = 256
   memory = 512
 
@@ -257,7 +261,7 @@ module "ecs_service" {
       cpu       = 256
       memory    = 512
       essential = true
-      image     = "docker.io/_/httpd:latest"
+      image     = "docker.io/tutum/hello-world:latest"
       port_mappings = [
         {
           name          = "default"
@@ -275,7 +279,7 @@ module "ecs_service" {
   }
 
   service_connect_configuration = {
-    # namespace = "example"
+    namespace = "default"
     service = {
       client_alias = {
         port     = 80
