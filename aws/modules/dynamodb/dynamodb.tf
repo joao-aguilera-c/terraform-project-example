@@ -1,4 +1,4 @@
-module "dynamodb_table" {
+module "dynamodb" {
   source = "terraform-aws-modules/dynamodb-table/aws"
   version = "3.2.0"
 
@@ -15,6 +15,9 @@ module "dynamodb_table" {
   billing_mode   = var.billing_mode
   read_capacity  = var.read_capacity
   write_capacity = var.write_capacity
+
+  stream_enabled = var.stream_enabled
+  stream_view_type = var.stream_view_type
 
   tags = var.tags
 }
