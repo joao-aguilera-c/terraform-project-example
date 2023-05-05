@@ -40,6 +40,7 @@ module "lambda" {
   tags          = local.tags
 
   pip_requirements = false
+  source_path      = "python-lambda/"
 
   attach_policy_statements = true
   policy_statements        = local.policy_statement
