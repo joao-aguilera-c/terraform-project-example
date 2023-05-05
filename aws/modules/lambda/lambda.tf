@@ -20,6 +20,11 @@ module "lambda_function" {
   attach_policy_statements = var.attach_policy_statements
   policy_statements        = var.policy_statements
 
+  attach_policy_json = var.attach_policy_json
+  policy_json        = var.policy_json
+
+  event_source_mapping = var.event_source_mapping
+
   allowed_triggers = var.allowed_triggers
   publish          = true
   tags             = var.tags

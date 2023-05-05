@@ -50,6 +50,18 @@ variable "environment_variables" {
   default     = {}
 }
 
+variable "attach_policy_json" {
+  description = "Controls whether policy_json should be added to IAM role for Lambda Function"
+  type = bool
+  default = false
+}
+
+variable "policy_json" {
+  description = "An additional policy document as JSON to attach to the Lambda Function role"
+  type = string
+  default = null
+}
+
 variable "attach_policy_statements" {
   description = "Whether to attach a custom policy statements to the lambda role"
   type        = bool
@@ -74,4 +86,10 @@ variable "tags" {
   default = {
     Name = "my-lambda1"
   }
+}
+
+variable "event_source_mapping" {
+  description = "Map of event source mapping"
+  type = any
+  default = {}
 }
