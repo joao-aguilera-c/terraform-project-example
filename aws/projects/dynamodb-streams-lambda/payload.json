@@ -5,7 +5,7 @@
             "eventName": "INSERT",
             "eventVersion": "1.1",
             "eventSource": "aws:dynamodb",
-            "awsRegion": "us-east-2",
+            "awsRegion": "<REGION>",
             "dynamodb": {
                 "ApproximateCreationDateTime": 1479499740,
                 "Keys": {
@@ -31,7 +31,7 @@
                 "SizeBytes": 112,
                 "StreamViewType": "NEW_IMAGE"
             },
-            "eventSourceARN": "arn:aws:dynamodb:us-east-2:152780035344:table/BarkTable/stream/2016-11-16T20:42:48.104"
+            "eventSourceARN": "arn:aws:dynamodb:<REGION>:<ACCOUNT_ID>:table/BarkTable/stream/2016-11-16T20:42:48.104"
         }
     ]
 }
